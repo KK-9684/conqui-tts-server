@@ -9,7 +9,7 @@ tts = TTS(
     model_name="tts_models/en/ljspeech/tacotron2-DDC",
     vocoder_name="vocoder_models/en/ljspeech/hifigan_v2",
     progress_bar=True,
-    gpu=True  # use_cuda=True
+    gpu=False  # Set to False if not using GPU
 )
 
 @app.route("/api/tts", methods=["GET"])
