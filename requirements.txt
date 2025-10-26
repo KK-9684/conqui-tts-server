@@ -1,2 +1,5 @@
 Flask==2.3.3
-TTS==0.13.2
+coqui-tts==0.27.0
+torch==2.1.2
+soundfile
+numpy<2
