@@ -13,6 +13,10 @@ tts = TTS(
 
 print("Available speakers:", tts.speakers)
 
+@app.route("/api/ping", methods=["GET"])
+def ping():
+    return jsonify({"status": "ok", "message": "Server is alive!"})
+
 @app.route("/api/tts", methods=["GET"])
 def generate_tts():
     text = request.args.get("text", "")

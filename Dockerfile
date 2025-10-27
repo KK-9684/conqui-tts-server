@@ -1,25 +1,26 @@
-# Use official Python slim image
 FROM python:3.10-slim
 
-# Set working directory
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies including espeak-ng
 RUN apt-get update && apt-get install -y \
     build-essential \
     libsndfile1 \
+    espeak-ng \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements and install Python packages
+# Install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Pre-download TTS model
+RUN python -c "from TTS.api import TTS; TTS(model_name='tts_models/en/vctk/vits', progress_bar=False, gpu=False)"
+
+# Copy app code
 COPY . .
 
 # Expose port
 EXPOSE 5002
 
-# Run the app with Gunicorn for production
-# 2 worker processes, bind to all interfaces
-CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5002", "server:app"]
+# Run with Gunicorn
+CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5002", "app:app"]
